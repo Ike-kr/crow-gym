@@ -169,18 +169,23 @@ export default function CouponPage() {
           <div className="bg-[#1A1A1A] rounded-2xl border border-[#333] p-8 text-center min-h-[300px] flex flex-col items-center justify-center">
             {introStep >= 1 && (
               <p className="text-xl text-white mb-4 animate-fade-in">
-                하지 말랬는데... 찍었구나? 😏
+                하지 말라는 건 못 참는 타입이구나 💪
               </p>
             )}
             {introStep >= 2 && (
               <p className="text-lg text-gray-300 mb-4 animate-fade-in">
-                그 도전 정신, 마음에 든다 🔥
+                그 도전 정신, 칭찬해
               </p>
             )}
             {introStep >= 3 && (
-              <p className="text-xl text-[#F5A623] font-bold animate-fade-in">
-                도전하는 자만이 가져간다.
-              </p>
+              <div className="animate-fade-in">
+                <p className="text-xl text-[#F5A623] font-bold mb-1">
+                  도전하는 자만이 가져간다.
+                </p>
+                <p className="text-gray-400">
+                  너를 위한 선물을 준비했어 🎁
+                </p>
+              </div>
             )}
           </div>
         )}
@@ -189,13 +194,10 @@ export default function CouponPage() {
         {status === "available" && (
           <div className="bg-[#1A1A1A] rounded-2xl border border-[#333] p-8 text-center">
             <h1 className="text-2xl font-bold text-white mb-2">
-              축하해, 도전자! 🎁
+              1회 무료 이용권
             </h1>
-            <p className="text-gray-400 mb-1">
-              너의 도전에 크로우짐이 선물을 준비했어.
-            </p>
-            <p className="text-sm text-[#F5A623] mb-6">
-              1회 무료 이용권 | 선착순 {MAX_COUPONS}명 한정
+            <p className="text-sm text-gray-500 mb-6">
+              선착순 {MAX_COUPONS}명 한정
             </p>
 
             {/* 남은 수량 카운터 */}
@@ -211,7 +213,7 @@ export default function CouponPage() {
               disabled={issuing}
               className="w-full bg-[#F5A623] text-black py-4 rounded-xl text-lg font-bold hover:bg-[#e09810] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {issuing ? "발급 중..." : "이용권 받기"}
+              {issuing ? "발급 중..." : "선물 받기"}
             </button>
 
             {/* 안내 문구 */}
