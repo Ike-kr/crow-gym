@@ -8,8 +8,9 @@ const STAFF_PASSWORD = "2656";
 
 export default function CouponPage() {
   const [status, setStatus] = useState<
-    "loading" | "available" | "issued" | "already" | "ended" | "used"
+    "loading" | "intro" | "available" | "issued" | "already" | "ended" | "used"
   >("loading");
+  const [introStep, setIntroStep] = useState(0);
   const [couponCode, setCouponCode] = useState("");
   const [remaining, setRemaining] = useState(MAX_COUPONS);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -71,10 +72,19 @@ export default function CouponPage() {
       if (data.remaining <= 0 && !localStorage.getItem("crow_gym_coupon")) {
         setStatus("ended");
       } else if (!localStorage.getItem("crow_gym_coupon")) {
-        setStatus("available");
+        setStatus("intro");
+        // 인트로 애니메이션 시작
+        setTimeout(() => setIntroStep(1), 500);
+        setTimeout(() => setIntroStep(2), 2000);
+        setTimeout(() => setIntroStep(3), 3500);
+        setTimeout(() => {
+          setIntroStep(4);
+          setStatus("available");
+        }, 5000);
       }
     } catch {
-      setStatus("available");
+      setStatus("intro");
+      setTimeout(() => setStatus("available"), 3000);
     }
   }
 
@@ -154,17 +164,38 @@ export default function CouponPage() {
           <div className="text-center text-gray-500">로딩 중...</div>
         )}
 
+        {/* 인트로 애니메이션 */}
+        {status === "intro" && (
+          <div className="bg-[#1A1A1A] rounded-2xl border border-[#333] p-8 text-center min-h-[300px] flex flex-col items-center justify-center">
+            {introStep >= 1 && (
+              <p className="text-xl text-white mb-4 animate-fade-in">
+                하지 말랬는데... 찍었구나? 😏
+              </p>
+            )}
+            {introStep >= 2 && (
+              <p className="text-lg text-gray-300 mb-4 animate-fade-in">
+                그 도전 정신, 마음에 든다 🔥
+              </p>
+            )}
+            {introStep >= 3 && (
+              <p className="text-xl text-[#F5A623] font-bold animate-fade-in">
+                도전하는 자만이 가져간다.
+              </p>
+            )}
+          </div>
+        )}
+
         {/* 발급 가능 */}
         {status === "available" && (
           <div className="bg-[#1A1A1A] rounded-2xl border border-[#333] p-8 text-center">
             <h1 className="text-2xl font-bold text-white mb-2">
-              1회 무료 이용권
+              축하해, 도전자! 🎁
             </h1>
             <p className="text-gray-400 mb-1">
-              크로우짐을 무료로 체험해보세요!
+              너의 도전에 크로우짐이 선물을 준비했어.
             </p>
-            <p className="text-sm text-gray-600 mb-6">
-              선착순 {MAX_COUPONS}명 한정
+            <p className="text-sm text-[#F5A623] mb-6">
+              1회 무료 이용권 | 선착순 {MAX_COUPONS}명 한정
             </p>
 
             {/* 남은 수량 카운터 */}
