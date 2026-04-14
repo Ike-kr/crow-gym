@@ -182,6 +182,13 @@ export default function CouponPage() {
             >
               {issuing ? "발급 중..." : "이용권 받기"}
             </button>
+
+            {/* 안내 문구 */}
+            <div className="mt-4 space-y-1">
+              <p className="text-xs text-gray-500 text-center">1인 1회 발급 | 중복 참여 불가</p>
+              <p className="text-xs text-gray-500 text-center">양도/거래 불가 | 본인만 사용 가능</p>
+              <p className="text-xs text-gray-600 text-center">크로우짐 데스크에서 직원 확인 후 사용</p>
+            </div>
           </div>
         )}
 
