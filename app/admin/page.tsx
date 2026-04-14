@@ -48,6 +48,28 @@ export default function AdminPage() {
     }
   }
 
+  const [resetting, setResetting] = useState(false);
+
+  async function handleReset() {
+    if (!confirm("정말 모든 쿠폰 데이터를 초기화하시겠습니까?\n테스트 데이터가 전부 삭제됩니다.")) return;
+    if (!confirm("한번 더 확인합니다. 초기화하면 되돌릴 수 없습니다.")) return;
+    setResetting(true);
+    try {
+      const res = await fetch("/api/admin/reset", { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        setCoupons([]);
+        alert("초기화 완료! 쿠폰이 100장으로 리셋되었습니다.");
+      } else {
+        alert("초기화 실패: " + (data.error || "알 수 없는 오류"));
+      }
+    } catch {
+      alert("초기화 중 오류가 발생했습니다.");
+    } finally {
+      setResetting(false);
+    }
+  }
+
   const totalIssued = coupons.length;
   const totalUsed = coupons.filter((c) => c.used).length;
   const remaining = 100 - totalIssued;
@@ -176,6 +198,20 @@ export default function AdminPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* 초기화 버튼 */}
+        <div className="mt-6 bg-[#1A1A1A] rounded-xl border border-[#333] p-4">
+          <button
+            onClick={handleReset}
+            disabled={resetting}
+            className="w-full bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {resetting ? "초기화 중..." : "전체 초기화 (쿠폰 100장 리셋)"}
+          </button>
+          <p className="text-xs text-gray-500 text-center mt-2">
+            테스트 후 실제 서비스 시작 전에 사용하세요.
+          </p>
         </div>
 
         <p className="text-center text-xs text-gray-600 mt-6">
