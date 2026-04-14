@@ -22,17 +22,43 @@ export default function CouponPage() {
   }, []);
 
   async function checkStatus() {
-    const existingCoupon = localStorage.getItem("crow_gym_coupon");
-    if (existingCoupon) {
-      const data = JSON.parse(existingCoupon);
-      setCouponCode(data.code);
-      if (data.used) {
-        setStatus("used");
-      } else {
-        setStatus("already");
+    // 서버 이벤트 버전 확인
+    try {
+      const vRes = await fetch("/api/admin/version");
+      const vData = await vRes.json();
+      const serverVersion = vData.version || "1";
+
+      const existingCoupon = localStorage.getItem("crow_gym_coupon");
+      if (existingCoupon) {
+        const data = JSON.parse(existingCoupon);
+        // 버전이 다르면 이전 이벤트 쿠폰 → 삭제하고 새로 참여 가능
+        if (data.version !== serverVersion) {
+          localStorage.removeItem("crow_gym_coupon");
+        } else {
+          setCouponCode(data.code);
+          if (data.used) {
+            setStatus("used");
+          } else {
+            setStatus("already");
+          }
+          fetchRemaining();
+          return;
+        }
       }
-      fetchRemaining();
-      return;
+    } catch {
+      // 버전 API 실패 시 기존 로직
+      const existingCoupon = localStorage.getItem("crow_gym_coupon");
+      if (existingCoupon) {
+        const data = JSON.parse(existingCoupon);
+        setCouponCode(data.code);
+        if (data.used) {
+          setStatus("used");
+        } else {
+          setStatus("already");
+        }
+        fetchRemaining();
+        return;
+      }
     }
     await fetchRemaining();
   }
@@ -65,9 +91,16 @@ export default function CouponPage() {
       const code = data.code;
       setCouponCode(code);
       setRemaining(data.remaining);
+      // 현재 이벤트 버전도 저장
+      let version = "1";
+      try {
+        const vRes = await fetch("/api/admin/version");
+        const vData = await vRes.json();
+        version = vData.version || "1";
+      } catch { /* 기본값 사용 */ }
       localStorage.setItem(
         "crow_gym_coupon",
-        JSON.stringify({ code, used: false, issuedAt: new Date().toISOString() })
+        JSON.stringify({ code, used: false, issuedAt: new Date().toISOString(), version })
       );
       setStatus("issued");
     } catch {
