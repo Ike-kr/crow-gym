@@ -261,6 +261,17 @@ export default function CouponPage() {
             >
               사용하기 (직원 전용)
             </button>
+
+            {/* 네이버 플레이스 */}
+            <a
+              href="https://naver.me/Ixsq6vMi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 mt-4 py-3 rounded-xl border border-[#333] text-gray-400 hover:text-white hover:border-[#1EC800] transition-colors"
+            >
+              <span className="text-[#1EC800] font-bold text-sm">N</span>
+              <span className="text-sm">크로우짐 정보 확인</span>
+            </a>
           </div>
         )}
 
@@ -289,6 +300,17 @@ export default function CouponPage() {
             >
               사용하기 (직원 전용)
             </button>
+
+            {/* 네이버 플레이스 */}
+            <a
+              href="https://naver.me/Ixsq6vMi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 mt-4 py-3 rounded-xl border border-[#333] text-gray-400 hover:text-white hover:border-[#1EC800] transition-colors"
+            >
+              <span className="text-[#1EC800] font-bold text-sm">N</span>
+              <span className="text-sm">크로우짐 정보 확인</span>
+            </a>
           </div>
         )}
 
