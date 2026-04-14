@@ -77,10 +77,7 @@ export default function CouponPage() {
         setTimeout(() => setIntroStep(1), 500);
         setTimeout(() => setIntroStep(2), 2000);
         setTimeout(() => setIntroStep(3), 3500);
-        setTimeout(() => {
-          setIntroStep(4);
-          setStatus("available");
-        }, 5000);
+        setTimeout(() => setIntroStep(4), 5000);
       }
     } catch {
       setStatus("intro");
@@ -182,10 +179,18 @@ export default function CouponPage() {
                 <p className="text-xl text-[#F5A623] font-bold mb-1">
                   도전하는 자만이 가져간다.
                 </p>
-                <p className="text-gray-400">
+                <p className="text-gray-400 mb-6">
                   너를 위한 선물을 준비했어 🎁
                 </p>
               </div>
+            )}
+            {introStep >= 4 && (
+              <button
+                onClick={() => setStatus("available")}
+                className="w-full bg-[#F5A623] text-black py-4 rounded-xl text-lg font-bold hover:bg-[#e09810] transition-colors animate-fade-in"
+              >
+                선물 받으러 가기
+              </button>
             )}
           </div>
         )}
