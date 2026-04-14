@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const MAX_COUPONS = 100;
-const STAFF_PASSWORD = "crow2026";
+const STAFF_PASSWORD = "2656";
 
 export default function CouponPage() {
   const [status, setStatus] = useState<

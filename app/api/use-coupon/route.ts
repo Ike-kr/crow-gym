@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const STAFF_PASSWORD = "crow2026";
+const STAFF_PASSWORD = "2656";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
