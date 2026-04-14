@@ -8,8 +8,8 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "1회 무료 이용권",
-  description: "헬스장 1회 무료 이용권을 받아보세요!",
+  title: "CROW GYM | 1회 무료 이용권",
+  description: "크로우짐 1회 무료 이용권 — 선착순 100명 한정",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-gray-50">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#0A0A0A]">{children}</body>
     </html>
   );
 }
