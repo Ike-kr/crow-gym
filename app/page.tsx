@@ -15,6 +15,7 @@ export default function CouponPage() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [issuing, setIssuing] = useState(false);
 
   useEffect(() => {
     checkStatus();
@@ -52,6 +53,8 @@ export default function CouponPage() {
   }
 
   async function issueCoupon() {
+    if (issuing) return;
+    setIssuing(true);
     try {
       const res = await fetch("/api/coupon", { method: "POST" });
       const data = await res.json();
@@ -69,6 +72,7 @@ export default function CouponPage() {
       setStatus("issued");
     } catch {
       alert("발급 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setIssuing(false);
     }
   }
 
@@ -140,9 +144,10 @@ export default function CouponPage() {
 
             <button
               onClick={issueCoupon}
-              className="w-full bg-[#F5A623] text-black py-4 rounded-xl text-lg font-bold hover:bg-[#e09810] transition-colors"
+              disabled={issuing}
+              className="w-full bg-[#F5A623] text-black py-4 rounded-xl text-lg font-bold hover:bg-[#e09810] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              이용권 받기
+              {issuing ? "발급 중..." : "이용권 받기"}
             </button>
           </div>
         )}
