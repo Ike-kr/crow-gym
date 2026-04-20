@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-const MAX_COUPONS = 100;
+const MAX_COUPONS = 30;
 const STAFF_PASSWORD = "2656";
 
 export default function CouponPage() {

@@ -9,7 +9,7 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: "CROW GYM | 1회 무료 이용권",
-  description: "크로우짐 1회 무료 이용권 — 선착순 100명 한정",
+  description: "크로우짐 1회 무료 이용권 — 선착순 30명 한정",
 };
 
 export default function RootLayout({

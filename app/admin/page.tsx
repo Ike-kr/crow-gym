@@ -59,7 +59,7 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success) {
         setCoupons([]);
-        alert("초기화 완료! 쿠폰이 100장으로 리셋되었습니다.");
+        alert("초기화 완료! 쿠폰이 30장으로 리셋되었습니다.");
       } else {
         alert("초기화 실패: " + (data.error || "알 수 없는 오류"));
       }
@@ -72,7 +72,7 @@ export default function AdminPage() {
 
   const totalIssued = coupons.length;
   const totalUsed = coupons.filter((c) => c.used).length;
-  const remaining = 100 - totalIssued;
+  const remaining = 30 - totalIssued;
 
   if (!authenticated) {
     return (
@@ -207,7 +207,7 @@ export default function AdminPage() {
             disabled={resetting}
             className="w-full bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {resetting ? "초기화 중..." : "전체 초기화 (쿠폰 100장 리셋)"}
+            {resetting ? "초기화 중..." : "전체 초기화 (쿠폰 30장 리셋)"}
           </button>
           <p className="text-xs text-gray-500 text-center mt-2">
             테스트 후 실제 서비스 시작 전에 사용하세요.
