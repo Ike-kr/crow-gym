@@ -24,14 +24,43 @@ export async function GET() {
 
   const issued = count || 0;
 
+  // 마감일 정보
+  const { data: deadlineData } = await supabase
+    .from("settings")
+    .select("value")
+    .eq("key", "event_deadline")
+    .single();
+
+  const deadline = deadlineData?.value || null;
+  let expired = false;
+  if (deadline) {
+    expired = new Date() > new Date(deadline + "T23:59:59+09:00");
+  }
+
   return NextResponse.json({
     remaining: MAX_COUPONS - issued,
     total: MAX_COUPONS,
     issued,
+    deadline,
+    expired,
   });
 }
 
 export async function POST() {
+  // 마감일 체크
+  const { data: deadlineData } = await supabase
+    .from("settings")
+    .select("value")
+    .eq("key", "event_deadline")
+    .single();
+
+  if (deadlineData?.value) {
+    const deadline = new Date(deadlineData.value + "T23:59:59+09:00");
+    if (new Date() > deadline) {
+      return NextResponse.json({ error: "expired" }, { status: 400 });
+    }
+  }
+
   const { count } = await supabase
     .from("coupons")
     .select("*", { count: "exact", head: true });

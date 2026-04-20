@@ -49,6 +49,31 @@ export default function AdminPage() {
   }
 
   const [resetting, setResetting] = useState(false);
+  const [deadline, setDeadline] = useState("");
+  const [savingDeadline, setSavingDeadline] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/deadline")
+      .then((r) => r.json())
+      .then((d) => setDeadline(d.deadline || ""))
+      .catch(() => {});
+  }, []);
+
+  async function handleSaveDeadline() {
+    setSavingDeadline(true);
+    try {
+      await fetch("/api/admin/deadline", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deadline: deadline || null }),
+      });
+      alert(deadline ? `마감일이 ${deadline}로 설정되었습니다.` : "마감일이 해제되었습니다.");
+    } catch {
+      alert("저장 중 오류가 발생했습니다.");
+    } finally {
+      setSavingDeadline(false);
+    }
+  }
 
   async function handleReset() {
     if (!confirm("정말 모든 쿠폰 데이터를 초기화하시겠습니까?\n테스트 데이터가 전부 삭제됩니다.")) return;
@@ -200,8 +225,43 @@ export default function AdminPage() {
           )}
         </div>
 
-        {/* 초기화 버튼 */}
+        {/* 이벤트 마감일 설정 */}
         <div className="mt-6 bg-[#1A1A1A] rounded-xl border border-[#333] p-4">
+          <h3 className="text-sm font-bold text-white mb-3">⏰ 이벤트 마감일</h3>
+          <div className="flex gap-2 mb-2">
+            <input
+              type="date"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+              className="flex-1 bg-[#111] border border-[#333] text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]"
+            />
+            <button
+              onClick={handleSaveDeadline}
+              disabled={savingDeadline}
+              className="bg-[#F5A623] text-black px-4 py-3 rounded-xl font-bold hover:bg-[#e09810] transition-colors disabled:opacity-50"
+            >
+              {savingDeadline ? "..." : "저장"}
+            </button>
+          </div>
+          {deadline ? (
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-400">
+                {deadline} 23:59까지 쿠폰 발급 가능
+              </p>
+              <button
+                onClick={() => { setDeadline(""); handleSaveDeadline(); }}
+                className="text-xs text-red-400 hover:underline"
+              >
+                마감일 해제
+              </button>
+            </div>
+          ) : (
+            <p className="text-xs text-gray-500">마감일 미설정 — 수량 소진 시까지 발급 가능</p>
+          )}
+        </div>
+
+        {/* 초기화 버튼 */}
+        <div className="mt-4 bg-[#1A1A1A] rounded-xl border border-[#333] p-4">
           <button
             onClick={handleReset}
             disabled={resetting}

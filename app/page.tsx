@@ -8,7 +8,7 @@ const STAFF_PASSWORD = "2656";
 
 export default function CouponPage() {
   const [status, setStatus] = useState<
-    "loading" | "intro" | "available" | "issued" | "already" | "ended" | "used"
+    "loading" | "intro" | "available" | "issued" | "already" | "ended" | "expired" | "used"
   >("loading");
   const [introStep, setIntroStep] = useState(0);
   const [couponCode, setCouponCode] = useState("");
@@ -69,7 +69,9 @@ export default function CouponPage() {
       const res = await fetch("/api/coupon");
       const data = await res.json();
       setRemaining(data.remaining);
-      if (data.remaining <= 0 && !localStorage.getItem("crow_gym_coupon")) {
+      if (data.expired && !localStorage.getItem("crow_gym_coupon")) {
+        setStatus("expired");
+      } else if (data.remaining <= 0 && !localStorage.getItem("crow_gym_coupon")) {
         setStatus("ended");
       } else if (!localStorage.getItem("crow_gym_coupon")) {
         setStatus("intro");
@@ -93,6 +95,10 @@ export default function CouponPage() {
       const data = await res.json();
       if (data.error === "ended") {
         setStatus("ended");
+        return;
+      }
+      if (data.error === "expired") {
+        setStatus("expired");
         return;
       }
       const code = data.code;
@@ -323,6 +329,21 @@ export default function CouponPage() {
             </h1>
             <p className="text-gray-400">
               선착순 {MAX_COUPONS}명이 모두 마감되었습니다.
+              <br />
+              <span className="text-gray-500">다음 이벤트를 기대해주세요!</span>
+            </p>
+          </div>
+        )}
+
+        {/* 이벤트 기간 만료 */}
+        {status === "expired" && (
+          <div className="bg-[#1A1A1A] rounded-2xl border border-[#333] p-8 text-center">
+            <div className="text-4xl mb-3">⏰</div>
+            <h1 className="text-2xl font-bold text-white mb-2">
+              이벤트 기간 종료
+            </h1>
+            <p className="text-gray-400">
+              이벤트 기간이 종료되었습니다.
               <br />
               <span className="text-gray-500">다음 이벤트를 기대해주세요!</span>
             </p>
